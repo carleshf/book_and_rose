@@ -62,7 +62,7 @@ function polygon(x, y, radius, npoints) {
 // Creation of the configuration menu
 for( var ii = 4; ii < 9; ii++ ) {
   var config = {
-    x: 35 + 75 * ( ii - 4 ), y: 120, sz: 50, clr: color_array[ ii - 4 ], n: ii,
+    x: 25 + 75 * ( ii - 4 ), y: 120, sz: 50, clr: color_array[ ii - 4 ], n: ii,
     drawing_fun: ( x, y, clr, n, selected ) => {
       let sz = 50
       let inc = 10
@@ -85,7 +85,7 @@ for( var ii = 4; ii < 9; ii++ ) {
 
 // Creation of the "play button" for the menu
 const play_btn = {
-  x: 185,
+  x: 175,
   y: 250,
   sz: 50,
   drawing_fun: ( x, y, clr = "#DD5555", selected = false  ) => {
@@ -127,7 +127,7 @@ function draw() {
     textFont(text_font)
     textSize( 32 )
     text( 'Tria la teva configuració', 55, 100 )
-    text( 'I prem el "play"!', 125, 235 )
+    text( 'I prem el "play"!', 115, 235 )
     buttons.forEach( (x) => { x.draw() } )
   }
 }
