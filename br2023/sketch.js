@@ -62,7 +62,7 @@ function polygon(x, y, radius, npoints) {
 // Creation of the configuration menu
 for( var ii = 4; ii < 9; ii++ ) {
   var config = {
-    x: 65 + 75 * ( ii - 4 ), y: 120, sz: 50, clr: color_array[ ii - 4 ], n: ii,
+    x: 35 + 75 * ( ii - 4 ), y: 120, sz: 50, clr: color_array[ ii - 4 ], n: ii,
     drawing_fun: ( x, y, clr, n, selected ) => {
       let sz = 50
       let inc = 10
@@ -85,7 +85,7 @@ for( var ii = 4; ii < 9; ii++ ) {
 
 // Creation of the "play button" for the menu
 const play_btn = {
-  x: 200,
+  x: 185,
   y: 250,
   sz: 50,
   drawing_fun: ( x, y, clr = "#DD5555", selected = false  ) => {
@@ -111,7 +111,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas( 480, 600 )
+  createCanvas( 400, 600 )
   frameRate( 60 )
 }
 
@@ -126,8 +126,8 @@ function draw() {
     noStroke()
     textFont(text_font)
     textSize( 32 )
-    text( 'Tria la teva configuració', 95, 100 )
-    text( 'I prem el "play"!', 135, 235 )
+    text( 'Tria la teva configuració', 55, 100 )
+    text( 'I prem el "play"!', 125, 235 )
     buttons.forEach( (x) => { x.draw() } )
   }
 }
@@ -197,9 +197,9 @@ function flower() {
     stroke( clr_trc )
     strokeWeight( 6 )
     if( frameCount <= 600 ) {
-      line( 240, 580, 240, 430 + frameCount / 10);
+      line( 200, 580, 200, 430 + frameCount / 10);
     } else if( frameCount > 600 ) {
-      line( 240, 580, 240, 490 )
+      line( 200, 580, 200, 490 )
     }
     noStroke()
   }
@@ -208,7 +208,7 @@ function flower() {
   push()
   // External petals
   fill( clr_flw )
-  translate( 240, 430 )
+  translate( 200, 430 )
   noStroke()
 
   for(var jj = 0; jj < petals; jj++) {
