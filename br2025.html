@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="cat">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sant Jordi 2025</title>
+    </head>
+    <header>
+        <style>
+            body {
+                background-color: #ffe4e1;
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: 'Dancing Script', cursive;
+            }
+
+            #startScreen {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: #ffe4e1;
+                text-align: center;
+            }
+
+            h1 {
+                color: #a51c30;
+                font-size: 36px;
+            }
+
+            button {
+                background-color: #a51c30;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-size: 20px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+            #gameCanvas {
+                display: none;
+            }
+        </style>
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    </header>
+    <body>
+        <div id="startScreen" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <h1 style="color: #a51c30;">Welcome to Your Digital Rose 🌹</h1>
+            <button id="startButton" style="background-color: #a51c30; color: white; font-size: 20px; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                Let's Start
+            </button>
+        </div>
+        <canvas id="gameCanvas" width="480" height="800"></canvas>
+    </body>
+    <footer>
+        <script>
+            const startScreen = document.getElementById("startScreen");
+            const canvas = document.getElementById("gameCanvas");
+            const ctx = canvas.getContext("2d");
+
+            const flowers = [];
+            const fontSize = 48;
+            let status = "starring";
+            let flag = 0;
+            const scoreLimit = 15;
+            let score = 0;
+            let timer = 20;
+            
+
+            const flowerTypes = [
+                { emoji: "🌼", points: 1 },
+                { emoji: "🌻", points: 1 },
+                { emoji: "🌷", points: 1 },
+                { emoji: "🌹", points: 3 }
+            ];
+
+            function createFlower() {
+                if (Math.random() < 0.01 || flowers.length < 2) {
+                    const x = Math.random() * (canvas.width - fontSize);
+                    const type = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+                    flowers.push({
+                             x,
+                             y: 0,
+                          size: fontSize,
+                         emoji: type.emoji,
+                        points: type.points,
+                         width: fontSize, // Width of hitbox
+                        height: fontSize  // Height of hitbox
+                    });
+                }
+            }
+
+            function drawFlowers() {
+                flowers.forEach(flower => {
+                    ctx.font = `${flower.size}px sans-serif`;
+                    ctx.fillStyle = "black";
+                    ctx.fillText(flower.emoji, flower.x, flower.y + flower.size * 0.8);
+                });
+            }
+
+            function updateFlowers() {
+                flowers.forEach(flower => flower.y += 2);
+            }
+
+            function checkFlowerCatch(mouseX, mouseY) {
+                flowers.forEach((flower, index) => {
+                    if(
+                        mouseX > flower.x &&
+                        mouseX < flower.x + flower.width &&
+                        mouseY > flower.y &&
+                        mouseY < flower.y + flower.height
+                    ) {
+                        score += flower.points;
+                        flowers.splice(index, 1);
+                    }
+                });
+            }
+
+            function removeMissedFlowers() {
+                flowers.forEach((flower, index) => {
+                    if (flower.y > canvas.height) {
+                        score -= 1;
+                        flowers.splice(index, 1);
+                    }
+                });
+            }
+
+            function updateTimer() {
+                timer -= 1 / 60;
+            }
+            
+            function drawTimer() {
+                ctx.font = "20px sans-serif";
+                ctx.fillStyle = "red";
+                ctx.fillText(`Time: ${timer.toFixed(1)}`, canvas.width - 100, 60);
+            }
+
+            function checkWinCondition() {
+                if (score >= scoreLimit) {
+                    status = "ending";
+                    flag = 1;
+                } else if(timer < 0) {
+                    status = "ending";
+                    flag = -1;
+                }
+            }
+
+            function drawScore() {
+                ctx.font = "20px sans-serif";
+                ctx.fillStyle = "black";
+                ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
+            }
+
+            function drawEnding() {
+                drawBackground();
+                ctx.fillStyle = "#a51c30";
+                if(flag == -1) {
+                    ctx.font = "17px 'Dancing Script', cursive";
+                    ctx.textAlign = "left";
+                    ctx.fillText("I tot i que no has fet " + scoreLimit + " punts...", 40, canvas.height / 2 - 65);
+                }
+                ctx.textAlign = "center";
+                ctx.font = "48px 'Dancing Script', cursive";
+                ctx.fillText("Feliç Sant Jordi! ❤️", canvas.width / 2, canvas.height / 2);
+                ctx.textAlign = "right";
+                ctx.font = "23px 'Dancing Script', cursive";
+                ctx.fillText("Barcelona 2025", canvas.width - 40, canvas.height / 2 + 55);
+            }
+
+            function drawBackground() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#ffe4e1";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+
+            // Game loop
+            function gameLoop() {
+                if(status == "starring") {
+
+                } else if(status == "playing") {
+                    drawBackground();
+
+                    drawScore();
+                    updateTimer();
+                    drawTimer();
+
+                    createFlower();
+                    updateFlowers();
+                    drawFlowers();
+                    removeMissedFlowers();
+
+                    checkWinCondition();
+                } else if(status == "ending") {
+                    drawEnding();
+                }
+                
+                requestAnimationFrame(gameLoop);
+            }
+
+            // Function to detect clicks on petals
+            canvas.addEventListener("click", event => {
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+
+                checkFlowerCatch(mouseX, mouseY);
+            });
+
+            document.getElementById("startButton").addEventListener("click", () => {
+                startScreen.style.display = "none"; // Hide start screen
+                canvas.style.display = "block";     // Show canvas
+                status = "playing";
+            });
+            
+
+            gameLoop(); // Start the game
+        </script>
+    </footer>
+</html>
