@@ -81,6 +81,17 @@
                 { emoji: "🌹", points: 3 }
             ];
 
+            function resizeCanvasForMobile() {
+                if (window.innerWidth <= 768) { // Mobile screen condition
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                } else {
+                    canvas.width = 480;
+                    canvas.height = 800;
+                }
+            }
+
+
             function createFlower() {
                 if (Math.random() < 0.01 || flowers.length < 2) {
                     const x = Math.random() * (canvas.width - fontSize);
@@ -167,7 +178,7 @@
                     ctx.fillText("I tot i que no has fet " + scoreLimit + " punts...", 40, canvas.height / 2 - 65);
                 }
                 ctx.textAlign = "center";
-                ctx.font = "48px 'Dancing Script', cursive";
+                ctx.font = "bold 48px 'Dancing Script', cursive";
                 ctx.fillText("Feliç Sant Jordi! ❤️", canvas.width / 2, canvas.height / 2);
                 ctx.textAlign = "right";
                 ctx.font = "23px 'Dancing Script', cursive";
@@ -205,7 +216,7 @@
                 requestAnimationFrame(gameLoop);
             }
 
-            // Function to detect clicks on petals
+
             canvas.addEventListener("click", event => {
                 const rect = canvas.getBoundingClientRect();
                 const mouseX = event.clientX - rect.left;
@@ -214,6 +225,8 @@
                 checkFlowerCatch(mouseX, mouseY);
             });
 
+            window.addEventListener("resize", resizeCanvasForMobile);
+
             document.getElementById("startButton").addEventListener("click", () => {
                 startScreen.style.display = "none"; // Hide start screen
                 canvas.style.display = "block";     // Show canvas
@@ -221,6 +234,7 @@
             });
             
 
+            resizeCanvasForMobile(); // Initial call
             gameLoop(); // Start the game
         </script>
     </footer>
